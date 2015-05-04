@@ -47,6 +47,36 @@ public class Board {
 
     }
 
+    public boolean placeToken(char player, int x, int y) {
+        for (int z = 0; z < board[x][y].length; z++) {
+            if (board[x][y][z] == ' ') {
+                board[x][y][z] = player;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void removeToken(int x, int y) {
+        for (int z = board[x][y].length-1; z >= 0; z--) {
+            if (board[x][y][z] != ' ') {
+                board[x][y][z] = ' ';
+                return;
+            }
+        }
+    }
+
+    public boolean movePossible(){
+        for (int x = 0; x < board.length; x++) {
+            for (int y = 0; y < board[x].length; y++) {
+                if (board[x][y][(board[x][y].length-1)] == ' ') {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public void print() {
         for (int x = 0; x < board.length; x++) {
             System.out.println("Layer "+ (x+1));
@@ -63,5 +93,12 @@ public class Board {
         //Evaluate Board from player X or O view
         //Koten Sie hier!
         return 0;
+    }
+
+    public int getLength() {
+        return board.length;
+    }
+    public int getWidth() {
+        return board[0].length;
     }
 }
