@@ -11,6 +11,11 @@ public class Board {
 
     private char[][][] board = new char[4][7][6];
 
+    /**
+     * Loads the board from a file. The file must have 24 lines with 7 characters each.
+     * The characters can only be spaces, X or O.
+     * @param filename
+     */
     public Board(String filename) {
 
         int x = 0, z = 0;
@@ -43,6 +48,13 @@ public class Board {
 
     }
 
+    /**
+     * Places a token for the specified player at the specified x and y position on top of the stack.
+     * @param player
+     * @param x
+     * @param y
+     * @return true or false, whether the move was successful (i.e. the stack was not full)
+     */
     public boolean placeToken(char player, int x, int y) {
         for (int z = 0; z < board[x][y].length; z++) {
             if (board[x][y][z] == ' ') {
@@ -53,6 +65,11 @@ public class Board {
         return false;
     }
 
+    /**
+     * Will remove the topmost token at the specified x and y position.
+     * @param x
+     * @param y
+     */
     public void removeToken(int x, int y) {
         for (int z = board[x][y].length-1; z >= 0; z--) {
             if (board[x][y][z] != ' ') {
@@ -62,6 +79,10 @@ public class Board {
         }
     }
 
+    /**
+     * Returns wether moves are still possible, i.e. the board is not full.
+     * @return
+     */
     public boolean movePossible(){
         for (int x = 0; x < board.length; x++) {
             for (int y = 0; y < board[x].length; y++) {
@@ -73,6 +94,9 @@ public class Board {
         return false;
     }
 
+    /**
+     * Prints the current board to commandline.
+     */
     public void print() {
         for (int z = 0; z < board[0][0].length; z++) {
             System.out.println("Layer "+ (z+1));
@@ -85,15 +109,29 @@ public class Board {
         }
     }
 
+    /**
+     * Evaluates the favorability of the board as seen by the specified player.
+     * @param player
+     * @return
+     */
     public int evaluate (char player) {
         //Evaluate Board from player X or O view
         //Koten Sie hier!
         return 0;
     }
 
+    /**
+     * Returns the length of the board.
+     * @return
+     */
     public int getLength() {
         return board.length;
     }
+
+    /**
+     * Returns the width of the board.
+     * @return
+     */
     public int getWidth() {
         return board[0].length;
     }
