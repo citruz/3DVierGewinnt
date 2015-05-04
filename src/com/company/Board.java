@@ -3,36 +3,32 @@ package com.company;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 /**
  * Created by seele on 04.05.2015.
  */
 public class Board {
 
-    private char[][][] board = new char[4][6][7];
+    private char[][][] board = new char[4][7][6];
 
     public Board(String filename) {
 
-        int x = 0,  y = 0;
+        int x = 0, z = 0;
         try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
             for(String line; (line = br.readLine()) != null; ) {
 
                 System.out.println(line);
 
-                int z = 0;
-                for (char c: line.toCharArray()) {
-                    if (c == 'X' || c == 'O') {
-                        board[x][y][z] = c;
+                for (int y = 0; y < line.length() && y < board[x][y].length; y++) {
+                    if (line.charAt(y) == 'X' || line.charAt(y) == 'O') {
+                        board[x][y][z] = line.charAt(y);
                     } else {
                         board[x][y][z] = ' ';
                     }
-                    z++;
                 }
                 x = (x + 1) % 4;
                 if (x == 0) {
-                    y++;
+                    z++;
                 }
             }
         } catch (IOException e) {
@@ -78,10 +74,10 @@ public class Board {
     }
 
     public void print() {
-        for (int x = 0; x < board.length; x++) {
-            System.out.println("Layer "+ (x+1));
-            for (int y = 0; y < board[x].length; y++) {
-                for (int z = 0; z < board[x][y].length; z++) {
+        for (int z = 0; z < board[0][0].length; z++) {
+            System.out.println("Layer "+ (z+1));
+            for (int x = 0; x < board.length; x++) {
+                for (int y = 0; y < board[x].length; y++) {
                     System.out.print(board[x][y][z]);
                 }
                 System.out.print("\n");
