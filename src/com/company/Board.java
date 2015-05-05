@@ -111,6 +111,21 @@ public class Board {
 
     /**
      * Evaluates the favorability of the board as seen by the specified player.
+     *
+     * iterate over all fields : field {
+     *     for each of the 26 possible directions : direction {
+     *         if line of 4 is possible from field in direction [
+     *              ecount = number of tokens from enemy
+     *              scound = number of tokes from self
+     *
+     *              if ecount == 4 return -inf
+     *              if scount == 4 return +inf
+     *              if ecount > 0 return 0
+     *              else return 2^scount
+     *         }
+     *     }
+     * }
+     *
      * @param player
      * @return
      */
