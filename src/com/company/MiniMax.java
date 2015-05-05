@@ -8,6 +8,7 @@ public class MiniMax {
     private int maxDepth;
     private char maxPlayer;
     private int[] savedMove;
+    private int bestScore;
 
     public static void main(String[] args) {
         MiniMax mm = new MiniMax(new Board("data.txt"), 3, 'X');
@@ -20,17 +21,23 @@ public class MiniMax {
 
         this.minimax(0, maxPlayer, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
-        System.out.println("Recommended move is at {"+savedMove[0]+","+savedMove[1]+"}");
+        System.out.println("Recommended move is at {"+savedMove[0]+","+savedMove[1]+"} with score: "+bestScore);
     }
 
     private int minimax (int depth, char currentPlayer, int alpha, int beta) {
-        //Return if max depth is reached or the board is full
+        //Return if max depth is reached, board is full or game has ended
         if (depth == maxDepth || !board.movePossible()) {
-            return board.evaluate(currentPlayer);
+            return board.evaluate(maxPlayer);
         }
+        int gameEnd = board.evaluate(maxPlayer);
+        if (gameEnd == Board.WIN || gameEnd == Board.LOOSE) {
+            return gameEnd;
+        }
+
         int minOrMaxValue = (currentPlayer == maxPlayer) ? alpha : beta;
 
         //Generate all possible moves
+        outerloop:
         for (int x = 0; x < board.getLength(); x++) {
             for (int y = 0; y < board.getWidth(); y++) {
 
@@ -39,24 +46,26 @@ public class MiniMax {
                     char otherPlayer = (currentPlayer == 'X') ? 'O' : 'X';
                     if (currentPlayer == maxPlayer) {
                         //MAX
-                        int value = minimax(depth+1,otherPlayer, minOrMaxValue, beta);
+                        int score = minimax(depth+1, otherPlayer, minOrMaxValue, beta);
                         board.removeToken(x,y);
 
-                        if (value > minOrMaxValue) {
-                            minOrMaxValue = value;
+                        if (score > minOrMaxValue) {
+                            minOrMaxValue = score;
                             if (minOrMaxValue >= beta)
-                                break;
-                            if (depth == 0)
+                                break outerloop; //stop iterate moves
+                            if (depth == 0) {
                                 savedMove = new int[]{x, y};
+                                bestScore = score;
+                            }
                         }
                     } else {
                         //MIN
-                        int value = minimax(depth+1, otherPlayer, alpha, minOrMaxValue);
+                        int score = minimax(depth+1, otherPlayer, alpha, minOrMaxValue);
                         board.removeToken(x,y);
-                        if (value < minOrMaxValue) {
-                            minOrMaxValue = value;
+                        if (score < minOrMaxValue) {
+                            minOrMaxValue = score;
                             if (minOrMaxValue <= alpha)
-                                break;
+                                break outerloop;
                         }
                     }
 

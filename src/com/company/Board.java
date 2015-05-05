@@ -9,6 +9,9 @@ import java.io.IOException;
  */
 public class Board {
 
+    public static int WIN = Integer.MAX_VALUE-1;
+    public static int LOOSE = Integer.MIN_VALUE+1;
+
     private char[][][] board = new char[4][7][6];
 
     /**
@@ -17,6 +20,8 @@ public class Board {
      * @param filename
      */
     public Board(String filename) {
+
+        this.reset();
 
         int x = 0, z = 0;
         try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
@@ -46,6 +51,16 @@ public class Board {
         System.out.println("Loaded board from file successfully:");
         this.print();
 
+    }
+
+    public void reset() {
+        for (int x = 0; x < board.length; x++) {
+            for (int y = 0; y < board[x].length; y++) {
+                for (int z = 0; z < board[x][y].length; z++) {
+                    board[x][y][z] = ' ';
+                }
+            }
+        }
     }
 
     /**
@@ -130,9 +145,66 @@ public class Board {
      * @return
      */
     public int evaluate (char player) {
-        //Evaluate Board from player X or O view
-        //Koten Sie hier!
-        return 0;
+        int score = 0;
+        int positions = 0;
+
+        //Foreach field...
+        for (int x = 0; x < board.length; x++) {
+            for (int y = 0; y < board[x].length; y++) {
+                for (int z = 0; z < board[x][y].length; z++) {
+
+                    //Foreach possible direction
+                    for (int dx = -1; dx <= 1; dx++) {
+                        for (int dy = -1; dy <= 1; dy++) {
+                            for (int dz = -1; dz <= 1; dz++) {
+
+                                if (dx == 0 && dy == 0 && dz == 0)
+                                    continue;
+
+                                //Calculate endpoints from line of 4
+                                int endX = x + 3*dx;
+                                int endY = y + 3*dy;
+                                int endZ = z + 3*dz;
+                                //Check if endpoint is still in bounds of board
+                                if (endX < 0 || endX >= board.length) continue;
+                                if (endY < 0 || endY >= board[x].length) continue;
+                                if (endZ < 0 || endZ >= board[x][z].length) continue;
+
+                                //Count tokens of each player
+                                int e_count = 0, s_count = 0;
+                                int tempX = x, tempY = y, tempZ = z;
+                                for (int i = 0; i < 4; i++) {
+                                    if (board[tempX][tempY][tempZ] == player) {
+                                        s_count++;
+                                    } else if (board[tempX][tempY][tempZ] != ' ') {
+                                        e_count++;
+                                    }
+
+                                    tempX += dx;
+                                    tempY += dy;
+                                    tempZ += dz;
+                                }
+
+                                if (e_count == 4) {
+                                    return LOOSE;
+                                } else if (s_count == 4) {
+                                    return WIN;
+                                } else if (e_count == 0) {
+                                    score += (int)Math.pow(5, s_count);
+                                }
+                                //Do not increment score if e_count != 0 -> enemy has occupied this opportunity
+
+                                positions++;
+
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+
+        return score/2;
     }
 
     /**

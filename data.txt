@@ -1,15 +1,16 @@
-XXOXO  
-XXOXO  
+ XOXO
+ OOXO
   XOXOX
   X O X
-OOX X  
-X  OX  
-  XO O 
-  O X O
- XO X  
-O      
-  OX   
-  X    
+   OO  
+  XXO
+    O
+    X  
+        
+        
+      
+    X  
+
        
        
        
@@ -17,8 +18,7 @@ O
        
        
        
+            
        
        
-       
-       
-       
+         
