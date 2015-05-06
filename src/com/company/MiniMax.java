@@ -42,11 +42,15 @@ public class MiniMax {
         this.maxPlayer = maxPlayer;
 
         System.out.println("Starting minimax with depth "+maxDepth+" and max player "+maxPlayer+".");
-
+        long startTime = System.currentTimeMillis();
         //start minimax with alpha = -inf and beta = +inf
         this.minimax(0, maxPlayer, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
+        long stopTime = System.currentTimeMillis();
+        double elapsedTime = (stopTime - startTime) / 1000.0;
+
         System.out.println("Recommended move is at {"+savedMove[0]+","+savedMove[1]+"} with score: "+bestScore);
+        System.out.println("Calculated in " + elapsedTime + " seconds.");
     }
 
     /**
