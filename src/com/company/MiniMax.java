@@ -1,29 +1,62 @@
 package com.company;
 
-import java.nio.file.Paths;
-
+/**
+ * Executes the Minimax-algorithm on a three dimensional connect 4 board.
+ */
 public class MiniMax {
 
+    /**
+     * Global game board
+     */
     private Board board;
+
+    /**
+     * Maximum depth in the search three
+     */
     private int maxDepth;
+
+    /**
+     * Player for which the score should be maximized
+     */
     private char maxPlayer;
+
+    /**
+     * Saves the current best move during algorithm execution
+     */
     private int[] savedMove;
+
+    /**
+     * Saves the score of the current best move during algorithm execution
+     */
     private int bestScore;
 
-    public static void main(String[] args) {
-        MiniMax mm = new MiniMax(new Board("data.txt"), 3, 'X');
-    }
-
+    /**
+     * Executes the minimax algorithm.
+     * @param b game board
+     * @param maxDepth max depth of the search tree
+     * @param maxPlayer player for which the score should be maximized (X or O)
+     */
     public MiniMax(Board b, int maxDepth, char maxPlayer) {
         this.board = b;
         this.maxDepth = maxDepth;
         this.maxPlayer = maxPlayer;
 
+        System.out.println("Starting minimax with depth "+maxDepth+" and max player "+maxPlayer+".");
+
+        //start minimax with alpha = -inf and beta = +inf
         this.minimax(0, maxPlayer, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
         System.out.println("Recommended move is at {"+savedMove[0]+","+savedMove[1]+"} with score: "+bestScore);
     }
 
+    /**
+     * Executes the actual algorithm.
+     * @param depth current depth
+     * @param currentPlayer current player (X or O)
+     * @param alpha alpha value
+     * @param beta beta value
+     * @return best possible score for this part of the tree
+     */
     private int minimax (int depth, char currentPlayer, int alpha, int beta) {
         //Return if max depth is reached, board is full or game has ended
         if (depth == maxDepth || !board.movePossible()) {
@@ -34,7 +67,8 @@ public class MiniMax {
             return gameEnd;
         }
 
-        int minOrMaxValue = (currentPlayer == maxPlayer) ? alpha : beta;
+        //Saves the current best value for the children of the node
+        int bestValue = (currentPlayer == maxPlayer) ? alpha : beta;
 
         //Generate all possible moves
         outerloop:
@@ -46,13 +80,15 @@ public class MiniMax {
                     char otherPlayer = (currentPlayer == 'X') ? 'O' : 'X';
                     if (currentPlayer == maxPlayer) {
                         //MAX
-                        int score = minimax(depth+1, otherPlayer, minOrMaxValue, beta);
+                        int score = minimax(depth+1, otherPlayer, bestValue, beta);
                         board.removeToken(x,y);
 
-                        if (score > minOrMaxValue) {
-                            minOrMaxValue = score;
-                            if (minOrMaxValue >= beta)
-                                break outerloop; //stop iterate moves
+                        if (score > bestValue) {
+                            //New best score
+                            bestValue = score;
+                            if (bestValue >= beta)
+                                break outerloop; //alpha-beta pruning -> stop iterating
+
                             if (depth == 0) {
                                 savedMove = new int[]{x, y};
                                 bestScore = score;
@@ -60,12 +96,12 @@ public class MiniMax {
                         }
                     } else {
                         //MIN
-                        int score = minimax(depth+1, otherPlayer, alpha, minOrMaxValue);
+                        int score = minimax(depth+1, otherPlayer, alpha, bestValue);
                         board.removeToken(x,y);
-                        if (score < minOrMaxValue) {
-                            minOrMaxValue = score;
-                            if (minOrMaxValue <= alpha)
-                                break outerloop;
+                        if (score < bestValue) {
+                            bestValue = score;
+                            if (bestValue <= alpha)
+                                break outerloop; //alpha-beta pruning -> stop iterating
                         }
                     }
 
@@ -73,6 +109,6 @@ public class MiniMax {
             }
         }
 
-        return minOrMaxValue;
+        return bestValue;
     }
 }

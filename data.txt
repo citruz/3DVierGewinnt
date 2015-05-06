@@ -2,14 +2,14 @@
  OOXO
   XOXOX
   X O X
-   OO  
+   OO
   XXO
     O
-    X  
-        
-        
-      
-    X  
+    X
+
+
+
+    X
 
        
        
