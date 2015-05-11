@@ -39,7 +39,7 @@ public class Board {
         try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
             for(String line; ((line = br.readLine()) != null) && z < board[0][0].length;) {
                 //Go to trough each character of the line.
-                for (y = 0; y < line.length() && y < board[x][y].length; y++) {
+                for (y = 0; y < line.length() && y < board[x].length; y++) {
                     if (line.charAt(y) == 'X' || line.charAt(y) == 'O') {
                         board[x][y][z] = line.charAt(y);
                     } else {
