@@ -41,6 +41,13 @@ public class MiniMax {
         this.maxDepth = maxDepth;
         this.maxPlayer = maxPlayer;
 
+        int score = b.evaluate(maxPlayer);
+        if (score == Board.LOOSE || score == Board.WIN) {
+            String win = (score == Board.WIN) ? "won :)" : "lost :(";
+            System.out.println("You have already "+win);
+            return;
+        }
+
         System.out.println("Starting minimax with depth "+maxDepth+" and max player "+maxPlayer+".");
         long startTime = System.currentTimeMillis();
         //start minimax with alpha = -inf and beta = +inf
@@ -49,7 +56,12 @@ public class MiniMax {
         long stopTime = System.currentTimeMillis();
         double elapsedTime = (stopTime - startTime) / 1000.0;
 
-        System.out.println("Recommended move is at {"+savedMove[0]+","+savedMove[1]+"} with score: "+bestScore);
+        if (savedMove != null) {
+            System.out.println("Recommended move is at {"+savedMove[0]+","+savedMove[1]+"} with score: "+bestScore);
+        } else {
+            System.out.println("Could not find a suitable move :(");
+        }
+
         System.out.println("Calculated in " + elapsedTime + " seconds.");
     }
 
