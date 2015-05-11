@@ -22,3 +22,7 @@
        
        
          
+
+Bereits in diesem relativ leeren Spielfeld kann der Algorithmus mit Tiefe 5 eine Strategie finden die sicher zum Sieg führt. In jedem Zug erzeugt der Computer eine konkrete Drohung die der Spieler abwenden muss, bis es an einem Punkt eine Zwickmühle entsteht und der Computer durch zwei Drohungen siegt.
+
+java -jar 3DVierGewinnt.jar Beispiel1.txt 5 X

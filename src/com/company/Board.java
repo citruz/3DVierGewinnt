@@ -38,6 +38,9 @@ public class Board {
         //Try to open file and read line by line
         try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
             for(String line; ((line = br.readLine()) != null) && z < board[0][0].length;) {
+                //Fix: Ignore UTF8 BOM
+                line = line.replace("\uFEFF", "");
+
                 //Go to trough each character of the line.
                 for (y = 0; y < line.length() && y < board[x].length; y++) {
                     if (line.charAt(y) == 'X' || line.charAt(y) == 'O') {
